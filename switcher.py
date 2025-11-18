@@ -1,75 +1,11 @@
 #!/usr/bin/env python3
 
+#TODO: Add new window feature
+
 import subprocess
-from flask import Flask, render_template_string, redirect, url_for, jsonify
+from flask import Flask, render_template, redirect, url_for, jsonify
 
-app = Flask(__name__)
-
-#TODO: separate template and styles
-#TODO: move template and styles to separate files
-
-HTML = """
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>tmux Window Switcher</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; display: flex; justify-content: center; }
-    .btn { display: block; margin: 4px 0; padding: 6px 12px; background: #ddd; text-decoration: none; color: #000; border-radius: 6px; min-width: 150px; text-align: center; }
-  </style>
-</head>
-<body><div style="width: 320px;">
-  <h1>tmux Windows</h1>
-  <div id="wins"></div>
-<script>
-async function refresh() {
-  const resp = await fetch('/windows');
-  const data = await resp.json();
-  const container = document.getElementById('wins');
-  container.innerHTML = '';
-  data.forEach(win => {
-    const wrap = document.createElement('div');
-    wrap.style.display = 'flex';
-    wrap.style.alignItems = 'center';
-    wrap.style.marginBottom = '6px';
-
-    const a = document.createElement('a');
-    a.className = 'btn';
-    a.href = `/switch/${win.id}`;
-    a.textContent = `${win.id}: ${win.name}`;
-    a.style.flex = '1';
-
-    const close = document.createElement('button');
-    close.textContent = '✕';
-    close.title = 'Close window';
-    close.style.background = 'red';
-    close.style.color = 'white';
-    close.style.border = 'none';
-    close.style.padding = '6px 10px';
-    close.style.marginLeft = '8px';
-    close.style.cursor = 'pointer';
-    close.onclick = async (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (!confirm('Kill tmux window ' + win.id + '?')) return;
-      await fetch(`/close/${win.id}`, { method: 'POST' });
-      refresh();
-    };
-
-    wrap.appendChild(a);
-    wrap.appendChild(close);
-    container.appendChild(wrap);
-  });
-}
-
-// initial load
-refresh();
-setInterval(refresh, 3000);
-</script>
-</div></body>
-</html>
-"""
+app = Flask(__name__,static_url_path='/static', static_folder='static', template_folder='templates')
 
 def get_windows():
     out = subprocess.check_output(["tmux", "list-windows", "-F", "#{window_index} #{window_name}"])\
@@ -82,7 +18,7 @@ def get_windows():
 
 @app.route("/")
 def index():
-    return render_template_string(HTML, windows=get_windows())
+    return render_template("index.html", windows=get_windows())
 
 @app.route("/windows")
 def windows():
