@@ -44,7 +44,7 @@ h1 {
 }
 
 .close{
-    background: #D78787;
+    background: #D7AFAF;
     color: #1C1C1C;
     border: none;
     border-radius: 6px;
@@ -55,4 +55,43 @@ h1 {
     cursor: pointer;
 }
 
+.close:hover{
+    background: #D78787 ;
+}
 
+.newwin {
+    display: flex;
+    margin-bottom: 12px;
+}
+
+.cmdinput {
+    flex: 1;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: solid 1px;
+    border-color: #06989A;
+    font-size: 14pt;
+    margin-right: 8px;
+    background: #1C1C1C;
+    color: #FFD7AF;
+    outline: none;
+}
+
+.cmdinput:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.cmdbtn {
+    padding: 6px 12px;
+    font-size: 16pt;
+    background: #06989A;
+    color: #1C1C1C;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.cmdbtn:hover {
+    background: #FCE94F;
+}

@@ -3,6 +3,7 @@
 #TODO: Add new window feature
 
 import subprocess
+import shlex
 from flask import Flask, render_template, redirect, url_for, jsonify
 
 app = Flask(__name__,static_url_path='/static', static_folder='static', template_folder='templates')
@@ -33,6 +34,22 @@ def switch_window(target):
 def close_window(target):
     subprocess.call(["tmux", "kill-window", "-t", target])
     return ('', 204)
+
+@app.route("/new", methods=["POST"])
+def new_window():
+    from flask import request
+    data = request.get_json(force=True)
+    cmd = data.get("cmd", "").strip()
+
+    if cmd:
+        args = shlex.split(cmd)
+        print (["tmux", "new-window"] + args)
+        subprocess.call(["tmux", "new-window"] + args)
+    else:
+        #TODO: This does nothing for now
+        pass
+    return ("", 204)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
