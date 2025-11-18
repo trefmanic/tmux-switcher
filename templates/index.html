@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body><div style="width: 320px;">
-  <h1>tmux Windows</h1>
+  <h1>tmux windows</h1>
   <div id="wins"></div>
 <script>
 async function refresh() {
@@ -25,6 +25,7 @@ async function refresh() {
     a.className = 'btn';
     a.href = `/switch/${win.id}`;
     a.textContent = `${win.id}: ${win.name}`;
+    a.title = 'Switch tmux window';
     a.style.flex = '1';
 
     const close = document.createElement('button');

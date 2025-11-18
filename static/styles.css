@@ -3,23 +3,33 @@ body{
     padding: 20px;
     display: flex;
     justify-content: center;
+    background: #2E3436;
+}
+
+h1 {
+    color: #FFD7AF;
 }
 
 .btn{
     display: block;
     margin: 4px 0;
     padding: 6px 12px;
-    background: #ddd;
+    background: #06989A;
     text-decoration: none;
-    color: #000;
+    font-size: 14pt;
+    color: #1C1C1C;
     border-radius: 6px;
     min-width: 150px;
     text-align: center;
 }
 
+.btn:hover{
+    background: #FCE94F;
+}
+
 .close{
-    background: red;
-    color: white;
+    background: #D78787;
+    color: #1C1C1C;
     border: none;
     border-radius: 6px;
     padding: 6px 10px;
