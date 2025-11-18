@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8">
   <title>tmux Window Switcher</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/png" sizes="64x64" href="{{ url_for('static', filename='favicon.png') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body><div style="width: 320px;">
+<body><div class="container">
   <h1>tmux windows</h1>
   <div id="wins"></div>
 <script>
@@ -17,10 +18,7 @@ async function refresh() {
   container.innerHTML = '';
   data.forEach(win => {
     const wrap = document.createElement('div');
-    wrap.style.display = 'flex';
-    wrap.style.alignItems = 'center';
-    wrap.style.marginBottom = '6px';
-
+    wrap.className = 'entry';
     const a = document.createElement('a');
     a.className = 'btn';
     a.href = `/switch/${win.id}`;
