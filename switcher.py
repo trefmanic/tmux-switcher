@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import subprocess
-from flask import Flask, render_template_string, redirect, url_for
+from flask import Flask, render_template_string, redirect, url_for, jsonify
 
 app = Flask(__name__)
 
@@ -21,12 +21,28 @@ HTML = """
   {% for win in windows %}
     <a class="btn" href="{{ url_for('switch_window', target=win['id']) }}">{{ win['id'] }}: {{ win['name'] }}</a>
   {% endfor %}
+<script>
+async function refresh() {
+  const resp = await fetch('/windows');
+  const data = await resp.json();
+  const container = document.getElementById('wins');
+  container.innerHTML = '';
+  data.forEach(win => {
+    const a = document.createElement('a');
+    a.className = 'btn';
+    a.href = `/switch/${win.id}`;
+    a.textContent = `${win.id}: ${win.name}`;
+    container.appendChild(a);
+  });
+}
+setInterval(refresh, 3000);
+</script>
 </body>
 </html>
 """
 
 def get_windows():
-    out = subprocess.check_output(["tmux", "list-windows", "-F", "#{window_id} #{window_name}"])\
+    out = subprocess.check_output(["tmux", "list-windows", "-F", "#{window_index} #{window_name}"])\
           .decode().strip().splitlines()
     windows = []
     for line in out:
@@ -37,6 +53,10 @@ def get_windows():
 @app.route("/")
 def index():
     return render_template_string(HTML, windows=get_windows())
+
+@app.route("/windows")
+def windows():
+    return jsonify(get_windows())
 
 @app.route("/switch/<target>")
 def switch_window(target):
